@@ -81,7 +81,7 @@
     .recommend-table tr:last-child td:last-child {
       border-bottom-right-radius: 12px;
     }
-    .bottom-label {
+    .info-label {
       margin: 34px 0 14px 0;
       text-align: center;
       font-size: 1.04em;
@@ -105,8 +105,8 @@
       button { font-size: 1em; padding: 12px 0; }
       .result { font-size: 1em; padding: 9px 6px; }
       .recommend-table th, .recommend-table td { font-size: 0.99em; padding: 9px 4px; }
-      .source-link { font-size: 0.91em; margin-top: 22px; }
-      .bottom-label { font-size: 0.97em; padding: 8px 6px 8px 6px; }
+      .source-link { font-size: 0.91em; margin-top: 12px; margin-bottom: 12px; }
+      .info-label { font-size: 0.97em; padding: 8px 6px 8px 6px; }
       .results-table td.value { min-width: 30px; font-size: 1em; }
     }
   </style>
@@ -131,6 +131,9 @@
     <div class="result" id="result"></div>
 
     <div class="table-section">
+      <div class="info-label">
+        There is no single optimal ratio. The ratio changes with the ingested amounts.
+      </div>
       <table class="recommend-table">
         <tr>
           <th>Intake (g/h)</th>
@@ -158,9 +161,6 @@
           <td>&gt; 3 h</td>
         </tr>
       </table>
-    </div>
-    <div class="bottom-label">
-      There is no single optimal ratio. The ratio changes with the ingested amounts.
     </div>
     <div class="source-link">
       Source: <a href="https://www.mysportscience.com/post/the-optimal-ratio-of-carbohydrates" target="_blank" rel="noopener">The optimal ratio of carbohydrates &ndash; MySportScience</a>
