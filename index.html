@@ -1,10 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Hello Website</title>
+  <meta charset="UTF-8">
+  <title>Carbohydrate Ratio Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; }
+    label { display: block; margin-top: 15px; }
+    input[type="number"] { width: 100px; }
+    .result { margin-top: 20px; font-size: 1.2em; }
+  </style>
 </head>
 <body>
-    <h1>Hello</h1>
+  <h1>Carbohydrate Intake Ratio Calculator</h1>
+  <label>
+    Carbohydrates (g):
+    <input type="number" id="carbs" value="100" min="1">
+  </label>
+  <label>
+    Desired Glucose:Fructose Ratio (e.g., 1:0.8)
+    <input type="number" id="ratioGlucose" value="1" step="0.01" min="0.01"> :
+    <input type="number" id="ratioFructose" value="0.8" step="0.01" min="0.01">
+  </label>
+  <button onclick="calculate()">Calculate</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function calculate() {
+      const totalCarbs = parseFloat(document.getElementById('carbs').value);
+      const ratioG = parseFloat(document.getElementById('ratioGlucose').value);
+      const ratioF = parseFloat(document.getElementById('ratioFructose').value);
+      // Let S = sucrose, M = maltodextrin
+      // S + M = totalCarbs
+      // Glucose = 0.5*S + M
+      // Fructose = 0.5*S
+      // (Glucose)/(Fructose) = ratioG / ratioF
+
+      // Substitute Fructose = 0.5S, Glucose = 0.5S + M
+      // (0.5S + M) / (0.5S) = ratioG / ratioF
+      // 0.5S + M = (ratioG / ratioF) * 0.5S
+      // M = (ratioG / ratioF) * 0.5S - 0.5S = 0.5S * (ratioG/ratioF - 1)
+      // But S + M = totalCarbs
+      // S + 0.5S * (ratioG/ratioF - 1) = totalCarbs
+      // S * (1 + 0.5 * (ratioG/ratioF - 1)) = totalCarbs
+      // S = totalCarbs / (1 + 0.5 * (ratioG/ratioF - 1))
+      const ratio = ratioG / ratioF;
+      const S = totalCarbs / (1 + 0.5 * (ratio - 1));
+      const M = totalCarbs - S;
+
+      if (S < 0 || M < 0 || isNaN(S) || isNaN(M)) {
+        document.getElementById('result').innerHTML = "Invalid input or ratio. Please check your values.";
+        return;
+      }
+
+      const glucose = 0.5 * S + M;
+      const fructose = 0.5 * S;
+
+      document.getElementById('result').innerHTML = `
+        <strong>To achieve ${totalCarbs} g at a glucose:fructose ratio of ${ratioG}:${ratioF}:</strong><br>
+        Sucrose: <b>${S.toFixed(2)} g</b><br>
+        Maltodextrin: <b>${M.toFixed(2)} g</b><br>
+        <br>
+        This will provide:<br>
+        Glucose: <b>${glucose.toFixed(2)} g</b><br>
+        Fructose: <b>${fructose.toFixed(2)} g</b><br>
+        (Glucose:Fructose ≈ ${(glucose/fructose).toFixed(2)}:1)
+      `;
+    }
+  </script>
 </body>
 </html>
