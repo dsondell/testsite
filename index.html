@@ -3,47 +3,133 @@
 <head>
   <meta charset="UTF-8">
   <title>Carbohydrate Ratio Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { font-family: Arial, sans-serif; margin: 30px; }
-    label { display: block; margin-top: 15px; }
-    input[type="number"] { width: 100px; }
-    .result { margin-top: 20px; font-size: 1.2em; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #f9f9fb;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .container {
+      background: #fff;
+      margin: 0 auto;
+      margin-top: 24px;
+      padding: 24px 18px 18px 18px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      max-width: 400px;
+      width: 95vw;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 14px;
+      margin-bottom: 8px;
+      font-size: 1.04em;
+    }
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 7px;
+    }
+    input[type="number"] {
+      font-size: 1em;
+      padding: 8px;
+      border: 1px solid #bbb;
+      border-radius: 6px;
+      width: 100px;
+      max-width: 33vw;
+      box-sizing: border-box;
+    }
+    input[type="number"]:focus {
+      border-color: #2d8cff;
+      outline: none;
+    }
+    button {
+      width: 100%;
+      margin-top: 18px;
+      padding: 13px 0;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 6px;
+      background: #2d8cff;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    button:active {
+      background: #1a6ed8;
+    }
+    .result {
+      margin-top: 22px;
+      font-size: 1.07em;
+      background: #f2f7ff;
+      border-radius: 8px;
+      padding: 14px 10px;
+      word-break: break-word;
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 12px 4vw 14px 4vw;
+        margin-top: 10px;
+        border-radius: 0;
+        box-shadow: none;
+        max-width: 100vw;
+      }
+      h1 {
+        font-size: 1.13rem;
+        margin-bottom: 12px;
+      }
+      input[type="number"] {
+        width: 80px;
+        font-size: 0.97em;
+      }
+      button {
+        font-size: 1em;
+        padding: 12px 0;
+      }
+      .result {
+        font-size: 1em;
+        padding: 9px 6px;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>Carbohydrate Intake Ratio Calculator</h1>
-  <label>
-    Carbohydrates (g):
-    <input type="number" id="carbs" value="100" min="1">
-  </label>
-  <label>
-    Desired Glucose:Fructose Ratio (e.g., 1:0.8)
-    <input type="number" id="ratioGlucose" value="1" step="0.01" min="0.01"> :
-    <input type="number" id="ratioFructose" value="0.8" step="0.01" min="0.01">
-  </label>
-  <button onclick="calculate()">Calculate</button>
-
-  <div class="result" id="result"></div>
-
+  <div class="container">
+    <h1>Carbohydrate Intake Ratio Calculator</h1>
+    <label for="carbs">Carbohydrates (g):</label>
+    <div class="input-row">
+      <input type="number" id="carbs" value="100" min="1" inputmode="decimal">
+    </div>
+    <label>Desired Glucose:Fructose Ratio (e.g., 1:0.8)</label>
+    <div class="input-row">
+      <input type="number" id="ratioGlucose" value="1" step="0.01" min="0.01" inputmode="decimal"> :
+      <input type="number" id="ratioFructose" value="0.8" step="0.01" min="0.01" inputmode="decimal">
+    </div>
+    <button onclick="calculate()">Calculate</button>
+    <div class="result" id="result"></div>
+  </div>
   <script>
     function calculate() {
       const totalCarbs = parseFloat(document.getElementById('carbs').value);
       const ratioG = parseFloat(document.getElementById('ratioGlucose').value);
       const ratioF = parseFloat(document.getElementById('ratioFructose').value);
-      // Let S = sucrose, M = maltodextrin
-      // S + M = totalCarbs
-      // Glucose = 0.5*S + M
-      // Fructose = 0.5*S
-      // (Glucose)/(Fructose) = ratioG / ratioF
-
-      // Substitute Fructose = 0.5S, Glucose = 0.5S + M
-      // (0.5S + M) / (0.5S) = ratioG / ratioF
-      // 0.5S + M = (ratioG / ratioF) * 0.5S
-      // M = (ratioG / ratioF) * 0.5S - 0.5S = 0.5S * (ratioG/ratioF - 1)
-      // But S + M = totalCarbs
-      // S + 0.5S * (ratioG/ratioF - 1) = totalCarbs
-      // S * (1 + 0.5 * (ratioG/ratioF - 1)) = totalCarbs
-      // S = totalCarbs / (1 + 0.5 * (ratioG/ratioF - 1))
       const ratio = ratioG / ratioF;
       const S = totalCarbs / (1 + 0.5 * (ratio - 1));
       const M = totalCarbs - S;
